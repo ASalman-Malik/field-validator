@@ -12,9 +12,11 @@ Let's first start with an little example on how to use this filed validator.
 ```javascript
 //import 
 import {validateEmail} from 'my-filed-validator'
-validateEmail('test@gmail.com')
+validateEmail('test@gmail.com')//true
 //require
-const validateEmail = require('my-field-validator')
+const validateMe = require('my-field-validator')
+const isEmail = validateMe.validateEmail('test@gmail.com')
+console.log(isEmail) //true 
 ```
 ## Description
 | Function | Description |
