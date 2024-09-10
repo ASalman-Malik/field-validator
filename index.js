@@ -1,5 +1,5 @@
 module.exports = {
-  //!Validate email 
+  //!Validate email
   validateEmail: (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -95,11 +95,111 @@ module.exports = {
     }
     return false;
   },
-  //! validate alphabets having " " - / () 9 
+  //! validate alphabets having " " - / () 9
   validateNameWithHyphensSlashDotBracketSpaceNumber: (name) => {
     if (/^[a-zA-Z\s\d-/.()]+$/.test(name)) {
       return true;
     }
     return false;
+  },
+  //! change given string to camel case
+  toCamelCase: (str) => {
+    const words = str.split(" ");
+    return words
+      .map((word, index) => {
+        if (index === 0) {
+          return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        }
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      })
+      .join(" ");
+  },
+  //! validate proper excel file
+  validateExcel: (file, callback) => {
+    const reader = new FileReader();
+    reader.onloadend = function (event) {
+      const arr = new Uint8Array(event.target.result).subarray(0, 4);
+      let header = "";
+      for (let i = 0; i < arr.length; i++) {
+        header += arr[i].toString(16).padStart(2, "0");
+      }
+      header = header.toUpperCase();
+      const isXls = header === "D0CF11E0";
+      callback(isXls);
+    };
+    reader.onerror = function () {
+      callback(false);
+    };
+    reader.readAsArrayBuffer(file.slice(0, 4));
+  },
+  //! validate proper pdf file
+  validatePdf: (file, callback) => {
+    const reader = new FileReader();
+    reader.onloadend = function (event) {
+      const arr = new Uint8Array(event.target.result).subarray(0, 4);
+      let header = "";
+      for (let i = 0; i < arr.length; i++) {
+        header += arr[i].toString(16);
+      }
+      const isPdf = header === "25504446";
+      const isValidImage = isPdf;
+      callback(isValidImage);
+    };
+    reader.onerror = function () {
+      callback(false);
+    };
+    reader.readAsArrayBuffer(file.slice(0, 4));
+  },
+  // !validate proper image
+  validateImg: (file, callback) => {
+    const reader = new FileReader();
+    reader.onloadend = function (event) {
+      const arr = new Uint8Array(event.target.result).subarray(0, 4);
+      let header = "";
+      for (let i = 0; i < arr.length; i++) {
+        header += arr[i].toString(16);
+      }
+
+      const isPng = header === "89504e47";
+      const isJpeg =
+        header === "ffd8ffe0" ||
+        header === "ffd8ffe1" ||
+        header === "ffd8ffe2" ||
+        header === "ffd8ffe3" ||
+        header === "ffd8ffe8";
+
+      const isValidImage = isPng || isJpeg;
+      callback(isValidImage);
+    };
+    reader.onerror = function () {
+      callback(false);
+    };
+    reader.readAsArrayBuffer(file.slice(0, 4));
+  },
+  //! validate image and pdf file
+  validateImgPdf: (file, callback) => {
+    const reader = new FileReader();
+    reader.onloadend = function (event) {
+      const arr = new Uint8Array(event.target.result).subarray(0, 4);
+      let header = "";
+      for (let i = 0; i < arr.length; i++) {
+        header += arr[i].toString(16);
+      }
+      const isPng = header === "89504e47";
+      const isJpeg =
+        header === "ffd8ffe0" ||
+        header === "ffd8ffe1" ||
+        header === "ffd8ffe2" ||
+        header === "ffd8ffe3" ||
+        header === "ffd8ffe8";
+      const isPdf = header === "25504446";
+
+      const isValidImage = isPng || isJpeg || isPdf;
+      callback(isValidImage);
+    };
+    reader.onerror = function () {
+      callback(false);
+    };
+    reader.readAsArrayBuffer(file.slice(0, 4));
   },
 };

@@ -34,5 +34,9 @@ console.log(isEmail) //true
 | validateAlphabetOnly | validate alphabet only |
 | validateUrl | validate URL |
 | validateNameWithHyphensSlashDotBracketSpaceNumber | validate alphabets having " " - / () 9  |
+| validateExcel | validate excel file |
+| validatePdf | validate pdf file |
+| validateImg | validate Image file |
+| validateImgPdf | validate Image OR pdf file |
 
 
