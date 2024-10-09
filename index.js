@@ -4,6 +4,11 @@ module.exports = {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   },
+  //!Validate password min 10 char one Capital one small one special and numeric
+  validatePassword: (password, length) => {
+    const passwordRegex = `/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{${length},}$/`;
+    return passwordRegex.test(password);
+  },
   //! validate indian mobile number starting with 6,7,8,9
   validateINMobile: (mobile) => {
     if (/^[6-9]\d{9}$/.test(mobile)) {
@@ -117,6 +122,14 @@ module.exports = {
   //! validate proper excel file
   validateExcel: (file, callback) => {
     const reader = new FileReader();
+    const fileName = file.name.toLowerCase();
+    const isXlsExtension = fileName.endsWith(".xls");
+    const isXlsxExtension = fileName.endsWith(".xlsx");
+
+    if (!isXlsExtension && !isXlsxExtension) {
+      callback(false);
+      return;
+    }
     reader.onloadend = function (event) {
       const arr = new Uint8Array(event.target.result).subarray(0, 4);
       let header = "";
@@ -125,11 +138,15 @@ module.exports = {
       }
       header = header.toUpperCase();
       const isXls = header === "D0CF11E0";
-      callback(isXls);
+      const isXlsx = header === "504B0304";
+      const isExcel = (isXls && isXlsExtension) || (isXlsx && isXlsxExtension);
+      callback(isExcel);
     };
+
     reader.onerror = function () {
       callback(false);
     };
+
     reader.readAsArrayBuffer(file.slice(0, 4));
   },
   //! validate proper pdf file

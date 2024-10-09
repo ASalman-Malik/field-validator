@@ -22,6 +22,7 @@ console.log(isEmail) //true
 | Function | Description |
 | --- | --- |
 | validateEmail | Validate email address |
+| validatePassword | Validate password minimum 10 digit one capital,small,number and special character |
 | validateAadhar | validate Indian Aadhar numbers |
 | validatePan | validate Indian PAN numbers |
 | validateGST | validate Indian GST numbers |
